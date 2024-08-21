@@ -36,6 +36,7 @@ namespace ORB_SLAM3 {
     {
         ar & boost::serialization::base_object<GeometricCamera>(*this);
         ar & const_cast<float&>(precision);
+        ar & mvLappingArea;
     }
 
     public:
