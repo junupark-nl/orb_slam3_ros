@@ -88,9 +88,13 @@ endif()
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-# )
+add_service_files(
+  FILES
+  SaveMap.srv
+  SetLocalizationMode.srv
+  RescaleMap.srv
+  SetMopp.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -100,10 +104,10 @@ endif()
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -145,10 +149,11 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+  ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/orb_slam3_core
   ${PROJECT_SOURCE_DIR}/orb_slam3_core/include
   ${PROJECT_SOURCE_DIR}/orb_slam3_core/include/CameraModels
-  ${PROJECT_SOURCE_DIR}/orb_slam3_core/Thirdparty/Sophus
+  ${PROJECT_SOURCE_DIR}/orb_slam3_core/Thirdparty/Sophus # just in case relative paths are used in the code
   ${PROJECT_SOURCE_DIR}/include
   ${EIGEN3_INCLUDE_DIR}
   ${catkin_INCLUDE_DIRS}
@@ -230,26 +235,16 @@ target_link_libraries(${ORB_SLAM_CORE}
 #   ${LIBS_ROS}
 # )
 
-# add_executable(${PROJECT_NAME}_fisheye_adaptor
-#   src/fisheye_adaptor.cpp
-# )
-# add_dependencies(${PROJECT_NAME}_fisheye_adaptor 
-#   ${ORB_SLAM_CORE}
-# )
-# target_link_libraries(${PROJECT_NAME}_fisheye_adaptor
-#   ${LIBS_ROS}
-# )
-
-# add_executable(${PROJECT_NAME}_stereo 
-#   src/stereo.cpp
-#   src/node.cpp
-# )
-# add_dependencies(${PROJECT_NAME}_stereo 
-#   ${ORB_SLAM_CORE}
-# )
-# target_link_libraries(${PROJECT_NAME}_stereo
-#   ${LIBS_ROS}
-# )
+add_executable(${PROJECT_NAME}_stereo 
+  src/stereo.cpp
+  src/node.cpp
+)
+add_dependencies(${PROJECT_NAME}_stereo 
+  ${ORB_SLAM_CORE}
+)
+target_link_libraries(${PROJECT_NAME}_stereo
+  ${LIBS_ROS}
+)
 
 # add_executable(${PROJECT_NAME}_rgbd 
 #   src/rgbd.cpp

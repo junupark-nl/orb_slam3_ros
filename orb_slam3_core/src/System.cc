@@ -305,9 +305,6 @@ Sophus::SE3f System::TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, 
     mTrackingState = mpTracker->mState;
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
-
-    mAllMapPoints = mpAtlas->GetAllMapPoints();
-
     return Tcw;
 }
 
@@ -379,9 +376,6 @@ Sophus::SE3f System::TrackRGBD(const cv::Mat &im, const cv::Mat &depthmap, const
     mTrackingState = mpTracker->mState;
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
-
-    mAllMapPoints = mpAtlas->GetAllMapPoints();
-
     return Tcw;
 }
 
@@ -458,9 +452,6 @@ Sophus::SE3f System::TrackMonocular(const cv::Mat &im, const double &timestamp, 
     mTrackingState = mpTracker->mState;
     mTrackedMapPoints = mpTracker->mCurrentFrame.mvpMapPoints;
     mTrackedKeyPointsUn = mpTracker->mCurrentFrame.mvKeysUn;
-
-    mAllMapPoints = mpAtlas->GetAllMapPoints();
-
     return Tcw;
 }
 
@@ -470,12 +461,24 @@ void System::ActivateLocalizationMode()
 {
     unique_lock<mutex> lock(mMutexMode);
     mbActivateLocalizationMode = true;
+    mbLocalizationMode = true;
 }
 
 void System::DeactivateLocalizationMode()
 {
     unique_lock<mutex> lock(mMutexMode);
     mbDeactivateLocalizationMode = true;
+    mbLocalizationMode = false;
+}
+
+void System::TurnLocalizationMode(bool on)
+{
+    if(on && !mbLocalizationMode) {
+        ActivateLocalizationMode();
+    }
+    if(!on && mbLocalizationMode) {
+        DeactivateLocalizationMode();
+    }
 }
 
 bool System::MapChanged()
@@ -1320,8 +1323,11 @@ vector<cv::KeyPoint> System::GetTrackedKeyPointsUn()
 
 vector<MapPoint*> System::GetAllMapPoints()
 {
-    unique_lock<mutex> lock(mMutexState);
-    return mAllMapPoints;
+    return mpAtlas->GetAllMapPoints();
+}
+
+cv::Mat System::GetRenderedImage() {
+    return mpFrameDrawer->DrawFrame();
 }
 
 double System::GetTimeFromIMUInit()

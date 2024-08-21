@@ -1,0 +1,4 @@
+# true: localization mode, false: mapping mode
+bool localization_mode
+---
+bool success

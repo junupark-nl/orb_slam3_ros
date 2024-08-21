@@ -139,7 +139,6 @@ namespace ORB_SLAM3 {
         void readIMU(cv::FileStorage& fSettings);
         void readRGBD(cv::FileStorage& fSettings);
         void readORB(cv::FileStorage& fSettings);
-        void readViewer(cv::FileStorage& fSettings);
         void readLoadAndSave(cv::FileStorage& fSettings);
         void readOtherParameters(cv::FileStorage& fSettings);
 

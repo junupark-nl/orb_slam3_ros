@@ -116,11 +116,9 @@ public:
     // Returns the camera pose (empty if tracking fails).
     Sophus::SE3f TrackMonocular(const cv::Mat &im, const double &timestamp, const vector<IMU::Point>& vImuMeas = vector<IMU::Point>(), string filename="");
 
-
-    // This stops local mapping thread (map building) and performs only camera tracking.
-    void ActivateLocalizationMode();
-    // This resumes local mapping thread and performs SLAM again.
-    void DeactivateLocalizationMode();
+    // This is a wrapper of ActivateLocalizationMode & DeactivateLocalizationMode
+    void TurnLocalizationMode(bool on);
+    bool GetLocalizationMode() const { return mbLocalizationMode; }
 
     // Returns true if there have been a big map change (loop closure, global BA)
     // since last call to this function
@@ -172,8 +170,8 @@ public:
     int GetTrackingState();
     std::vector<MapPoint*> GetTrackedMapPoints();
     std::vector<cv::KeyPoint> GetTrackedKeyPointsUn();
-
     std::vector<MapPoint*> GetAllMapPoints();
+    cv::Mat GetRenderedImage();
 
     // For debugging
     double GetTimeFromIMUInit();
@@ -191,9 +189,13 @@ public:
 #endif
 
 private:
-
     void SaveAtlas(int type);
     bool LoadAtlas(int type);
+
+    // This stops local mapping thread (map building) and performs only camera tracking.
+    void ActivateLocalizationMode();
+    // This resumes local mapping thread and performs SLAM again.
+    void DeactivateLocalizationMode();
 
     string CalculateCheckSum(string filename, int type);
 
@@ -238,6 +240,7 @@ private:
     std::mutex mMutexMode;
     bool mbActivateLocalizationMode;
     bool mbDeactivateLocalizationMode;
+    bool mbLocalizationMode;
 
     // Shutdown flag
     bool mbShutDown;

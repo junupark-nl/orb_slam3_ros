@@ -165,8 +165,6 @@ namespace ORB_SLAM3 {
 
         readORB(fSettings);
         cout << "\t-Loaded ORB settings" << endl;
-        readViewer(fSettings);
-        cout << "\t-Loaded viewer settings" << endl;
         readLoadAndSave(fSettings);
         cout << "\t-Loaded Atlas settings" << endl;
         readOtherParameters(fSettings);

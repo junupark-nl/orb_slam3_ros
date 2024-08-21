@@ -18,10 +18,6 @@
 
 #include "Atlas.h"
 
-#include "CameraModels/GeometricCamera.h"
-#include "CameraModels/Pinhole.h"
-#include "CameraModels/KannalaBrandt8.h"
-
 namespace ORB_SLAM3
 {
 
