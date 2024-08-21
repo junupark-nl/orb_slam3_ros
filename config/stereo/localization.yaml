@@ -1,0 +1,91 @@
+%YAML:1.0
+System.LoadAtlasFromFile: "/root/catkin_ws/src/orb_slam3_ros/resource/a"
+
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+Camera.type: "KannalaBrandt8"
+
+# Left Camera calibration and distortion parameters (OpenCV)
+Camera.fx: 444.401239
+Camera.fy: 446.278623
+Camera.cx: 639.140749
+Camera.cy: 397.348875
+
+# Kannala-Brandt distortion parameters
+Camera.k1: 0.067479
+Camera.k2: -0.048179
+Camera.k3: 0.061611
+Camera.k4: 0.039479
+
+# Right Camera calibration and distortion parameters (OpenCV)
+Camera2.fx: 441.120058
+Camera2.fy: 444.427604
+Camera2.cx: 641.329130
+Camera2.cy: 400.118349
+
+# Kannala-Brandt distortion parameters
+Camera2.k1: 0.090732
+Camera2.k2: -0.053269
+Camera2.k3: 0.010546
+Camera2.k4: 0.080845
+
+# Transformation matrix from right camera to left camera
+#Tlr: !!opencv-matrix
+#   rows: 3
+#   cols: 4
+#   dt: f
+#   data: [ 1.0000,    0.0008,    0.0007,    0.1011,
+#             -0.0008,    0.9989,    0.0469,    0.0019,
+#             -0.0007,   -0.0469,    0.9989,    0.0010]
+
+Tlr: !!opencv-matrix
+  rows: 3
+  cols: 4
+  dt: f
+  data: [ 0.99785983,-0.00787564,-0.06491326, 0.07895943, 
+          0.00238544, 0.99644393,-0.08422469, -0.00508567, 
+          0.06534575, 0.08388959, 0.99433016, -0.00295832]
+
+# Camera resolution
+Camera.width: 1280
+Camera.height: 800
+
+# Lapping area between images
+Camera.lappingBegin: 0
+Camera.lappingEnd: 1279
+
+Camera2.lappingBegin: 0
+Camera2.lappingEnd: 1279
+
+# Camera frames per second
+Camera.fps: 30.0
+
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
+Camera.RGB: 1
+
+# Close/Far threshold. Baseline times.
+ThDepth: 40.0
+
+Camera.bf: 36.8
+
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
+
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 1000
+
+# ORB Extractor: Scale factor between levels in the scale pyramid
+ORBextractor.scaleFactor: 1.2
+
+# ORB Extractor: Number of levels in the scale pyramid
+ORBextractor.nLevels: 8
+
+
+# ORB Extractor: Fast threshold
+# Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
+# Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
+# You can lower these values if your images have low contrast
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7

@@ -533,16 +533,17 @@ void System::Shutdown()
         /*usleep(5000);
     }*/
 
+   /*
     if(!mStrSaveAtlasToFile.empty())
     {
         Verbose::PrintMess("Atlas saving to file " + mStrSaveAtlasToFile, Verbose::VERBOSITY_NORMAL);
         SaveAtlas(FileType::BINARY_FILE);
     }
+    */
 
 #ifdef REGISTER_TIMES
     mpTracker->PrintTimeStats();
 #endif
-
 
 }
 
@@ -1246,7 +1247,6 @@ void System::SaveTrajectoryKITTI(const string &filename)
     f.close();
 }
 
-
 void System::SaveDebugData(const int &initIdx)
 {
     // 0. Save initialization trajectory
@@ -1302,6 +1302,18 @@ void System::SaveDebugData(const int &initIdx)
     f.close();
 }
 
+bool System::SaveMap(const string &filename)
+{
+    mStrSaveAtlasToFile = filename;
+    try {
+        SaveAtlas(FileType::BINARY_FILE);
+    } catch (const std::exception& e) {
+        cerr << " - Error saving the Atlas: " << e.what() << endl;
+        return false;
+    }
+    std::cout << " - Saved" << std::endl;
+    return true;
+}
 
 int System::GetTrackingState()
 {
@@ -1402,9 +1414,10 @@ void System::SaveAtlas(int type){
         // Save the current session
         mpAtlas->PreSave();
 
-        string pathSaveFileName = "./";
+        string pathSaveFileName;
         pathSaveFileName = pathSaveFileName.append(mStrSaveAtlasToFile);
         pathSaveFileName = pathSaveFileName.append(".osa");
+        std::cout << "Saving Atlas to file " << pathSaveFileName << " ... " << std::endl;
 
         string strVocabularyChecksum = CalculateCheckSum(mStrVocabularyFilePath,TEXT_FILE);
         std::size_t found = mStrVocabularyFilePath.find_last_of("/\\");
@@ -1441,9 +1454,10 @@ bool System::LoadAtlas(int type)
     string strFileVoc, strVocChecksum;
     bool isRead = false;
 
-    string pathLoadFileName = "./";
+    string pathLoadFileName;
     pathLoadFileName = pathLoadFileName.append(mStrLoadAtlasFromFile);
     pathLoadFileName = pathLoadFileName.append(".osa");
+    std::cout << "Loading Atlas from file " << pathLoadFileName << " ... " << std::endl;
 
     if(type == TEXT_FILE) // File text
     {

@@ -154,18 +154,19 @@ void node::publish_periodicals() {
 }
 
 bool node::service_save_map(orb_slam3_ros::SaveMap::Request &req, orb_slam3_ros::SaveMap::Response &res){
-    std::string file_name = ros::package::getPath("orb_SLAM3_ros") + "/resource/" + req.name;
-    //TODO: use ATLAS
-    // res.success = orb_slam_->SaveMap(file_name + ".bin");
-    res.success = false;
+    std::string file_name = ros::package::getPath("orb_slam3_ros") + "/resource/" + req.name;
+
+
+    res.success = orb_slam_->SaveMap(file_name);
     if (!res.success) {
         ROS_ERROR("[ORB_SLAM3_ROS] Map could not be saved.");
     }
-    if (!save_initial_pose(file_name)){
+    else if (!save_initial_pose(file_name)){
         ROS_ERROR("[ORB_SLAM3_ROS] Initial tf could not be saved.");
         res.success = false;
+    } else {
+        ROS_INFO("[ORB_SLAM3_ROS] Map & Initial pose saved.");
     }
-    ROS_INFO("[ORB_SLAM3_ROS] Map & Initial pose saved.");
     return res.success;
 }
 
@@ -208,7 +209,7 @@ bool node::service_set_minimum_observations_per_point(orb_slam3_ros::SetMopp::Re
 bool node::save_initial_pose(const std::string &file_name) {
     std::ofstream out(file_name + "_initial_tf.bin", std::ios_base::binary);
     if (!out.is_open()) {
-        ROS_ERROR("[ORB_SLAM3_ROS] Initial tf file %s not found.", (file_name + "_initial_tf.bin").c_str());
+        ROS_ERROR("[ORB_SLAM3_ROS] Cannot open Initial tf file %s.", (file_name + "_initial_tf.bin").c_str());
         return false;
     }
     try {
@@ -219,6 +220,7 @@ bool node::save_initial_pose(const std::string &file_name) {
         print_transform_info(tf_map_to_vehicle_init_, "Saved initial vehicle pose");
         return true;
     } catch (...) {
+        ROS_ERROR("[ORB_SLAM3_ROS] Initial tf could not be saved.");
         return false;
     }
 }

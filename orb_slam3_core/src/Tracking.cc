@@ -1084,8 +1084,10 @@ bool Tracking::ParseCamParamFile(cv::FileStorage &fSettings)
                     rightLappingEnd = rightLappingEnd * mImageScale;
                 }
 
+        std::cout <<"=====" << std::endl;
                 static_cast<KannalaBrandt8*>(mpCamera)->mvLappingArea[0] = leftLappingBegin;
                 static_cast<KannalaBrandt8*>(mpCamera)->mvLappingArea[1] = leftLappingEnd;
+        std::cout <<"====" << std::endl;
 
                 mpFrameDrawer->both = true;
 

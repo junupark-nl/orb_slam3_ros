@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Define arguments with default values -->
+    <arg name="robot_namespace" default="ids"/>
+    <arg name="left_image_topic" default="/ifs/tracking_down" />
+    <arg name="right_image_topic" default="/ifs/tracking_rear" />
+
+    <arg name="publish_map" default="true" />
+    <arg name="publish_rendered_image" default="true" />
+    <arg name="publish_pose" default="true" />
+    <arg name="publish_tf" default="false" />
+    <arg name="publish_pose_to" default="/orb_slam2_stereo/pose" />
+    <arg name="publish_map_to" default="/orb_slam2_stereo/map" />
+    <arg name="publish_rendered_image_to" default="/orb_slam2_stereo/rendered_image" />
+
+    <arg name="localization_only" default="true" />
+    <arg name="configuration_file" value="$(eval 'stereo/localization.yaml' if arg('localization_only') else 'stereo/mapping.yaml')" />
+
+    <node name="orb_slam3_stereo" pkg="orb_slam3_ros" type="orb_slam3_ros_stereo" output="screen">
+        <!-- topic remapping -->
+        <remap from="/camera/left/image_raw" to="$(arg left_image_topic)"/>
+        <remap from="/camera/right/image_raw" to="$(arg right_image_topic)"/>
+        <remap from="/orb_slam2_stereo/pose" to="$(arg publish_pose_to)" />
+        <remap from="/orb_slam2_stereo/map" to="$(arg publish_map_to)" />
+        <remap from="/orb_slam2_stereo/rendered_image" to="$(arg publish_rendered_image_to)" />
+
+        <!-- Parameters for original ORB-SLAM3 -->
+        <param name="vocabulary_file" type="string" value="$(find orb_slam3_ros)/orb_slam3_core/Vocabulary/ORBvoc.txt" />
+        <param name="settings_file" type="string" value="$(find orb_slam3_ros)/config/$(arg configuration_file)" />
+        <param name="do_rectify" type="bool" value="false" />
+
+        <!-- static parameters -->
+        <param name="publish_map" type="bool" value="$(arg publish_map)" />
+        <param name="publish_rendered_image" type="bool" value="$(arg publish_rendered_image)" />
+        <param name="publish_pose" type="bool" value="$(arg publish_pose)" />
+        <param name="publish_tf" type="bool" value="$(arg publish_tf)" />
+    </node>
+</launch>
