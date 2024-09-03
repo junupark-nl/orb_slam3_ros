@@ -1,5 +1,5 @@
 %YAML:1.0
-System.LoadAtlasFromFile: "/root/catkin_ws/src/orb_slam3_ros/resource/a"
+System.LoadAtlasFromFile: "/root/catkin_ws/src/orb_slam3_ros/resource/p"
 
 #--------------------------------------------------------------------------------------------
 # Camera Parameters. Adjust them!

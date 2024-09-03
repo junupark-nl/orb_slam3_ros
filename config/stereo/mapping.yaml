@@ -49,6 +49,7 @@ Tlr: !!opencv-matrix
 # Camera resolution
 Camera.width: 1280
 Camera.height: 800
+Camera.imageScale: 2.0
 
 # Lapping area between images
 Camera.lappingBegin: 0
